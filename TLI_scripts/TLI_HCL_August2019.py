@@ -4,7 +4,8 @@ Created on Thu Jun 07 14:09:18 2018
 
 @author: TinaB
 """
-
+## Script to calculate TLIs, plot TLI, plot scatterplots of TN, TP, turbisity, chla
+## Also outputs TN, TP, CHla means and raw data as csvs
 ###########################################################
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -15,7 +16,7 @@ import seaborn as sns
 ##############################################
 ## define path where graphs are saved
 #datapath_out = 'C:\\data\\TLI\\SQ\\HTnew\\limits\\2019\\'
-datapath_out = 'C:\\data\\TLI\\SQ\\HTnew\\2019\\QA\\'
+datapath_out = 'C:\\data\\TLI\\SQ\\HTnew\\2019b\\'
 
 base_url = 'http://wateruse.ecan.govt.nz'
 hts = 'WQAll.hts'
@@ -126,17 +127,17 @@ def calcTLI(x):
     dates_chla = wq1['DateTime']  
     chla1 = wq1['Value']    
     chla_1 = pd.to_numeric(chla1, errors='coerce')
-    chla_values2 = chla_1.astype(float).fillna(0.0001).values                    
+    chla_values2 = chla_1.astype(float).fillna(0.1).values                    
 
     chla = numpy.zeros(len(chla_values2))
     for i in range (0,len(chla_values2)):
 ############# remove this when data base fixed
-        if ((sitename == 'Marion') and (chla_values2[i] > 0.050)):
+        if ((sitename == 'Marion') and (chla_values2[i] > 50.0)):
             chla[i] = 2.7
 ############### remove to her and change elif to if
-        elif (chla_values2[i] < 0.19):
-            chla[i] = 1000.0*chla_values2[i]
-            #remove next two lines when 2011 marhc april fixed
+#        elif (chla_values2[i] < 0.19):
+#            chla[i] = 1000.0*chla_values2[i]
+#            #remove next two lines when 2011 marhc april fixed
         elif (chla_values2[i] > 150):
             chla[i] = chla_values2[i]/1000.0
         else:
@@ -152,18 +153,7 @@ def calcTLI(x):
         print df3
 
     ### Turbidity ### 
-#    if ((sitename == 'Sheppard') or (sitename == 'Marion') or (sitename == 'Mason') or (sitename == 'Evelyn') or (sitename == 'Catherine') or (sitename == 'Henrietta') or (sitename == 'Middelton') or (sitename == 'McGregor') or (sitename == 'Kellands_mid')): 
-#        measurement = 'Turbidity (NU)'
-#        wq1 = get_data(base_url, hts, site, measurement, from_date='2004-01-12', to_date='2018-05-01').reset_index()
-#        dates_Turbidity = wq1[['DateTime']]
-#        Turbidity_values = wq1['Value']  
-#        
-#        Turb_1 = pd.to_numeric(Turbidity_values, errors='coerce')
-#        Turbidity_values1 = Turb_1.astype(float).fillna(0.1).values  
-#        
-#        raw_data4 = {'Date': dates_Turbidity,'Turbidity': Turbidity_values1}
-#        df4 = pd.DataFrame(raw_data4, columns = ['Date', 'Turbidity'])
-#    else:
+
     measurement = 'Turbidity'
     wq1 = get_data(base_url, hts, site, measurement, from_date=startdate, to_date=enddate).reset_index()
     dates_Turbidity = wq1['DateTime']
@@ -171,20 +161,6 @@ def calcTLI(x):
     
     Turb_1 = pd.to_numeric(Turbidity_values1, errors='coerce')
     Turbidity_values = Turb_1.astype(float).fillna(0.1).values   
-        
-#        Turb_1 = pd.to_numeric(Turbidity_values, errors='coerce')
-#        Turbidity_values1 = Turb_1.astype(float).fillna(0.1).values   
-        
-#        measurement = 'Turbidity (NU)'
-#        wq1 = get_data(base_url, hts, site, measurement, from_date='2004-01-12', to_date='2018-05-01').reset_index()
-#        dates_Turbidity0 = wq1['DateTime']
-#        Turbidity_values = wq1['Value']
-#        
-#        Turb_1 = pd.to_numeric(Turbidity_values, errors='coerce')
-#        Turbidity_values0 = Turb_1.astype(float).fillna(0.1).values  
-#        
-#        dates_Turbidity = numpy.concatenate([dates_Turbidity0,dates_Turbidity1])
-#        Turbidity_values = numpy.concatenate([Turbidity_values0,Turbidity_values1])    
     
     raw_data4 = {'Date': dates_Turbidity,'Turbidity': Turbidity_values}
     df4 = pd.DataFrame(raw_data4, columns = ['Date', 'Turbidity'])
@@ -194,9 +170,6 @@ def calcTLI(x):
         print df4.Date
         df4 = df4.drop([df4.index[59],df4.index[60],df4.index[61],df4.index[64],df4.index[66]])## 21-1-19 and 12-4-19 not pushed through yet
         print df4
-
-#        Turb_1 = pd.to_numeric(Turbidity_values, errors='coerce')
-#        Turbidity_values0 = Turb_1.astype(float).fillna(0.1).values  
 
     df.set_index(['Date'])
     df2.set_index(['Date'])
@@ -453,67 +426,7 @@ def calcTLI(x):
         plt.close()  
         
         
-#    ### QA stuff
-#    # median, max, min for each year (mean already covered)
-#    TN_mean1 = new_df.resample('A-JUN').min() # annual mean for hydro year 
-#    TN_mean = TN_mean1.TN 
-#    Years_TN = pd.DatetimeIndex(TN_mean.index).year
-#                               
-#    TP_mean1 = new_df.resample('A-JUN').mean() 
-#    TP_mean = TP_mean1.TP 
-#    Years_TP = pd.DatetimeIndex(TP_mean.index).year                               
-#
-#    chla_mean1 = new_df.resample('A-JUN').mean()
-#    chla_mean = chla_mean1.chla 
-#    Years_chla = pd.DatetimeIndex(chla_mean.index).year
-#     
-#    ## Turbdidity 
-#    chla_mean1 = new_df.resample('A-JUN').mean()
-#    chla_mean = chla_mean1.chla 
-#    Years_chla = pd.DatetimeIndex(chla_mean.index).year
-#
-#
-#    Years_ab = Years
-#    print Years_ab
-#    if (sitename != 'Kellands_shore'):                    
-#          
-#        filename = sq+'_QA_plot_min'
-#        fig, ax = plt.subplots(2,2, figsize=(8.5, 5))
-#        
-#        ax[0,0].bar(index, Turbidity_mean, bar_width, color='b',label = 'Turbidity')
-#        ax[0,0].set_ylabel('Turbidity')
-#        ax[0,0].set_xticks(index) # + bar_width/2)
-#        ax[0,0].set_xticklabels((Years_ab), rotation='vertical')
-#        ax[0,0].set_title(sitename1)
-#    
-#        ax[0,1].bar(index, TN_mean, bar_width, color='b', label='TN annual mean') 
-#        ax[0,1].axhline(y = TN_limit, linewidth=2, color='#d62728')#, label = 'CLWRP limit')
-#        ax[0,1].legend(frameon=True, facecolor = 'white', framealpha = 1.0)
-#        ax[0,1].set_ylabel('Total Nitrogen in microg/L')
-#        ax[0,1].set_xticks(index) # + bar_width/2)
-#        ax[0,1].set_xticklabels((Years_ab), rotation='vertical')
-#        
-#        ax[1,0].bar(index, chla_mean, bar_width, color='b', label='Chla annual mean') 
-#        ax[1,0].axhline(y = chla_limit, linewidth=2, color='#d62728')#, label = 'CLWRP limit')
-#        ax[1,0].legend(frameon=True, facecolor = 'white', framealpha = 1.0)
-#        ax[1,0].set_ylabel('Chlorophyll a in microg/L')
-#        ax[1,0].set_xlabel('Year')
-#        ax[1,0].set_xticks(index) # + bar_width/2)
-#        ax[1,0].set_xticklabels((Years_ab), rotation='vertical')
-#        
-#        ax[1,1].bar(index, TP_mean, bar_width, color='b', label='TP annual mean') 
-#        ax[1,1].axhline(y = TP_limit, linewidth=2, color='#d62728')#, label = 'CLWRP limit')
-#        ax[1,1].legend(frameon=True, facecolor = 'white', framealpha = 1.0)
-#        ax[1,1].set_ylabel('Total Phosphorus in microg/L')
-#        ax[1,1].set_xlabel('Year')
-#        ax[1,1].set_xticks(index) # + bar_width/2)
-#        ax[1,1].set_xticklabels((Years_ab), rotation='vertical')
-#    
-#        plt.tight_layout()
-#        plt.show()
-#        plt.savefig(str(datapath_out)+filename+'.png')
-#        plt.close()  
-    
+   
  #######       
     # redo scatterplots for lakes with little data
     if ((sitename == 'Catherine') or (sitename == 'Denny') or (sitename == 'Evelyn')
@@ -570,48 +483,45 @@ def calcTLI(x):
         plt.savefig(str(datapath_out)+filename+'.png')
         plt.close()     
                 
-#    ########### Write all data to csv
-#    df['SiteName'] = 'Lake'+sitename
-#    df['SQ'] = site  
-#    df['Parameter'] = 'TP' 
-##    print df
-##    with open(str(datapath_out)+'TP_all_lakes.csv', 'a') as f:
-##        df.to_csv(f, mode='a', header=f.tell()==0)
-#     
-#    df.to_csv(str(datapath_out)+'TP_all_lakes.csv', mode='a', encoding='utf-8', header=False)#, header= ['Date','TP','Sitename','SQ','Parameter'])
-#    print 'written csv'
-#    
-#    df2['SiteName'] = 'Lake'+sitename
-#    df2['SQ'] = site  
-#    df2['Parameter'] = 'TN'     
-#    df2.to_csv(str(datapath_out)+'TN_all_lakes.csv', mode='a', encoding='utf-8', header=False)#, header= ['Date','TP','Sitename','SQ','Parameter'])
-#    print 'written csv'
-#    
-#    df3['SiteName'] = 'Lake'+sitename
-#    df3['SQ'] = site  
-#    df3['Parameter'] = 'chla'    
-##    print df3
-#    df3.to_csv(str(datapath_out)+'chla_all_lakes.csv', mode='a', encoding='utf-8', header=False)#, header= ['Date','TP','Sitename','SQ','Parameter'])
-#    print 'written csv'    
-#    
-#    ### write means    
-#    df_Mean_chla['SiteName'] = 'Lake'+sitename
-#    df_Mean_chla['SQ'] = site  
-#    df_Mean_chla['Parameter'] = 'chla_mean'     
-#    df_Mean_chla.to_csv(str(datapath_out)+'ChlaMeans_all_lakes.csv', mode='a', encoding='utf-8', header=False)
-#    print 'written csv'
-#    
-#    df_Mean_TN['SiteName'] = 'Lake'+sitename
-#    df_Mean_TN['SQ'] = site  
-#    df_Mean_TN['Parameter'] = 'TN_mean'     
-#    df_Mean_TN.to_csv(str(datapath_out)+'TNMeans_all_lakes.csv', mode='a', encoding='utf-8', header=False)
-#    print 'written csv'
-#    
-#    df_Mean_TP['SiteName'] = 'Lake'+sitename
-#    df_Mean_TP['SQ'] = site  
-#    df_Mean_TP['Parameter'] = 'TP_mean'     
-#    df_Mean_TP.to_csv(str(datapath_out)+'TPMeans_all_lakes.csv', mode='a', encoding='utf-8', header=False)
-#    print 'written csv'    
+    ########### Write all data to csv
+    df['SiteName'] = 'Lake'+sitename
+    df['SQ'] = site  
+    df['Parameter'] = 'TP' 
+     
+    df.to_csv(str(datapath_out)+'TP_all_lakes.csv', mode='a', encoding='utf-8', header=False)#, header= ['Date','TP','Sitename','SQ','Parameter'])
+    print 'written csv'
+    
+    df2['SiteName'] = 'Lake'+sitename
+    df2['SQ'] = site  
+    df2['Parameter'] = 'TN'     
+    df2.to_csv(str(datapath_out)+'TN_all_lakes.csv', mode='a', encoding='utf-8', header=False)#, header= ['Date','TP','Sitename','SQ','Parameter'])
+    print 'written csv'
+    
+    df3['SiteName'] = 'Lake'+sitename
+    df3['SQ'] = site  
+    df3['Parameter'] = 'chla'    
+#    print df3
+    df3.to_csv(str(datapath_out)+'chla_all_lakes.csv', mode='a', encoding='utf-8', header=False)#, header= ['Date','TP','Sitename','SQ','Parameter'])
+    print 'written csv'    
+    
+    ### write means    
+    df_Mean_chla['SiteName'] = 'Lake'+sitename
+    df_Mean_chla['SQ'] = site  
+    df_Mean_chla['Parameter'] = 'chla_mean'     
+    df_Mean_chla.to_csv(str(datapath_out)+'ChlaMeans_all_lakes.csv', mode='a', encoding='utf-8', header=False)
+    print 'written csv'
+    
+    df_Mean_TN['SiteName'] = 'Lake'+sitename
+    df_Mean_TN['SQ'] = site  
+    df_Mean_TN['Parameter'] = 'TN_mean'     
+    df_Mean_TN.to_csv(str(datapath_out)+'TNMeans_all_lakes.csv', mode='a', encoding='utf-8', header=False)
+    print 'written csv'
+    
+    df_Mean_TP['SiteName'] = 'Lake'+sitename
+    df_Mean_TP['SQ'] = site  
+    df_Mean_TP['Parameter'] = 'TP_mean'     
+    df_Mean_TP.to_csv(str(datapath_out)+'TPMeans_all_lakes.csv', mode='a', encoding='utf-8', header=False)
+    print 'written csv'    
     
     a = TLI_data
     return a
