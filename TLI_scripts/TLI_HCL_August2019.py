@@ -245,7 +245,13 @@ def calcTLI(x):
         y_lim = 5.0
         TP_limit = 10.0
         TN_limit = 350.0
-        chla_limit = 2.0  
+        chla_limit = 2.0        
+    elif (sitename == 'Opuha'):        
+        TLI_limit = 4.0
+        y_lim = 5.0
+        TP_limit = 20.0
+        TN_limit = 340.0
+        chla_limit = 5.0  
     elif ((sitename == 'Kellands_shore') or (sitename == 'Kellands_mid')):        
         TLI_limit = 3.2
         y_lim = 6.0
@@ -483,45 +489,45 @@ def calcTLI(x):
         plt.savefig(str(datapath_out)+filename+'.png')
         plt.close()     
                 
-    ########### Write all data to csv
-    df['SiteName'] = 'Lake'+sitename
-    df['SQ'] = site  
-    df['Parameter'] = 'TP' 
-     
-    df.to_csv(str(datapath_out)+'TP_all_lakes.csv', mode='a', encoding='utf-8', header=False)#, header= ['Date','TP','Sitename','SQ','Parameter'])
-    print 'written csv'
-    
-    df2['SiteName'] = 'Lake'+sitename
-    df2['SQ'] = site  
-    df2['Parameter'] = 'TN'     
-    df2.to_csv(str(datapath_out)+'TN_all_lakes.csv', mode='a', encoding='utf-8', header=False)#, header= ['Date','TP','Sitename','SQ','Parameter'])
-    print 'written csv'
-    
-    df3['SiteName'] = 'Lake'+sitename
-    df3['SQ'] = site  
-    df3['Parameter'] = 'chla'    
-#    print df3
-    df3.to_csv(str(datapath_out)+'chla_all_lakes.csv', mode='a', encoding='utf-8', header=False)#, header= ['Date','TP','Sitename','SQ','Parameter'])
-    print 'written csv'    
-    
-    ### write means    
-    df_Mean_chla['SiteName'] = 'Lake'+sitename
-    df_Mean_chla['SQ'] = site  
-    df_Mean_chla['Parameter'] = 'chla_mean'     
-    df_Mean_chla.to_csv(str(datapath_out)+'ChlaMeans_all_lakes.csv', mode='a', encoding='utf-8', header=False)
-    print 'written csv'
-    
-    df_Mean_TN['SiteName'] = 'Lake'+sitename
-    df_Mean_TN['SQ'] = site  
-    df_Mean_TN['Parameter'] = 'TN_mean'     
-    df_Mean_TN.to_csv(str(datapath_out)+'TNMeans_all_lakes.csv', mode='a', encoding='utf-8', header=False)
-    print 'written csv'
-    
-    df_Mean_TP['SiteName'] = 'Lake'+sitename
-    df_Mean_TP['SQ'] = site  
-    df_Mean_TP['Parameter'] = 'TP_mean'     
-    df_Mean_TP.to_csv(str(datapath_out)+'TPMeans_all_lakes.csv', mode='a', encoding='utf-8', header=False)
-    print 'written csv'    
+#    ########### Write all data to csv
+#    df['SiteName'] = 'Lake'+sitename
+#    df['SQ'] = site  
+#    df['Parameter'] = 'TP' 
+#     
+#    df.to_csv(str(datapath_out)+'TP_hcl_all_lakes.csv', mode='a', encoding='utf-8', header=False)#, header= ['Date','TP','Sitename','SQ','Parameter'])
+#    print 'written csv'
+#    
+#    df2['SiteName'] = 'Lake'+sitename
+#    df2['SQ'] = site  
+#    df2['Parameter'] = 'TN'     
+#    df2.to_csv(str(datapath_out)+'TN_hcl_all_lakes.csv', mode='a', encoding='utf-8', header=False)#, header= ['Date','TP','Sitename','SQ','Parameter'])
+#    print 'written csv'
+#    
+#    df3['SiteName'] = 'Lake'+sitename
+#    df3['SQ'] = site  
+#    df3['Parameter'] = 'chla'    
+##    print df3
+#    df3.to_csv(str(datapath_out)+'chla_hcl_all_lakes.csv', mode='a', encoding='utf-8', header=False)#, header= ['Date','TP','Sitename','SQ','Parameter'])
+#    print 'written csv'    
+#    
+#    ### write means    
+#    df_Mean_chla['SiteName'] = 'Lake'+sitename
+#    df_Mean_chla['SQ'] = site  
+#    df_Mean_chla['Parameter'] = 'chla_mean'     
+#    df_Mean_chla.to_csv(str(datapath_out)+'ChlaMeans_hcl_all_lakes.csv', mode='a', encoding='utf-8', header=False)
+#    print 'written csv'
+#    
+#    df_Mean_TN['SiteName'] = 'Lake'+sitename
+#    df_Mean_TN['SQ'] = site  
+#    df_Mean_TN['Parameter'] = 'TN_mean'     
+#    df_Mean_TN.to_csv(str(datapath_out)+'TNMeans_hcl_all_lakes.csv', mode='a', encoding='utf-8', header=False)
+#    print 'written csv'
+#    
+#    df_Mean_TP['SiteName'] = 'Lake'+sitename
+#    df_Mean_TP['SQ'] = site  
+#    df_Mean_TP['Parameter'] = 'TP_mean'     
+#    df_Mean_TP.to_csv(str(datapath_out)+'TPMeans_hcl_all_lakes.csv', mode='a', encoding='utf-8', header=False)
+#    print 'written csv'    
     
     a = TLI_data
     return a
